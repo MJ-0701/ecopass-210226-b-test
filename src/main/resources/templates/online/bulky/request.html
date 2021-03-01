@@ -8,18 +8,49 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
     <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 
-<!--    <link th:href="@{/common/css/client.css}" rel="stylesheet" type="text/css" />-->
-<!--    <link th:href="@{/common/css/common.css}" rel="stylesheet" type="text/css" />-->
-<!--    <link th:href="@{/vendor/toast-ui/tui-grid.css}" rel="stylesheet" type="text/css" />-->
-<!--    <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />-->
-<!--    <link th:href="@{vendor/toast-ui/tui-grid.js}" rel="script">-->
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/admin/apsol-base.css}">
+
+    <th:block th:replace="config/csrf :: csrfConfig"/>
+    <th:block th:replace="config/jquery :: jqueryConfig"/>
+    <th:block th:replace="config/toast-ui :: toastUiConfig"/>
+
+    <script th:src="@{/common/js/common.js}"></script>
+    <script th:src="@{/common/js/juso-popup.js}"></script>
 
 
 </head>
 <body>
-
+test
     <script>
-        const Grid = tui.grid;
+        const Grid = new tui.Grid({
+            el: document.getElementById('grid'),
+            data: gridData,
+            scrollX: false,
+            scrollY: false,
+            column: [
+                {   header: 'Name',
+                    name: 'tui테스트'
+                },
+                {   header: 'artist',
+                    name: '채명정'
+                },
+                {   header: 'Type',
+                    name:   'type'
+
+                },
+                {
+                    header: 'Release',
+                    name: 'release'
+                },
+                {
+                    header: 'Genre',
+                    name: 'genre'
+                }
+            ]
+        });
+
     </script>
 </body>
 </html>
