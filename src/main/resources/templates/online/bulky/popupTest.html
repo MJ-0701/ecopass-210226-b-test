@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
+    <style type="text/css">
+        *{font-family:맑은 고딕;margin:0;padding:0;text-decoration:none;}
+
+        /* 첫번째 레이어 팝업*/
+        .pop_box{display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:100;}
+        .pop_box div.pop_bg{position:absolute;top:0;left:0;width:100%;height:100%;background:#000;opacity:.6;filter:alpha(opacity=60);}
+        .pop_box div.pop_contents{position:absolute;top:50%;left:50%;width:410px;height:250px;border:3px solid #222;background-color:#fff;padding:30px;}
+
+        /* 두번째 레이어 팝업*/
+        .pop_box2{display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:100;}
+        .pop_box2 div.pop_bg2{position:absolute;top:0;left:0;width:100%;height:100%;background:#000;opacity:.6;filter:alpha(opacity=60);}
+        .pop_box2 div.pop_contents2{position:absolute;top:50%;left:50%;width:410px;height:250px;border:3px solid #222;background-color:#fff;padding:30px;}
+    </style>
+
+</head>
+<body>
+
+
+<a href="javascript:void(0)" id="btn_popup_open">팝업 열기11111</a>
+<a href="javascript:void(0)" id="btn_popup_open2">팝업 열기2222</a>
+
+
+
+<!-- 레이어 팝업 -->
+<div class="pop_box">
+    <div class="pop_bg"></div>
+    <div class="pop_contents">
+        <h2>부서추가 <a href="javascript:void(0)" id="btn_popup_close">&#x2715;</a></h2> <!--&#x2715; = x 표시 icon -->
+        내용
+    </div>
+</div>
+
+<div class="pop_box2">
+    <div class="pop_bg2"></div>
+    <div class="pop_contents2">
+        <h2>부서추가 <a href="javascript:void(0)" id="btn_popup_close2">&#x2715;</a></h2>
+        내용
+    </div>
+</div>
+<!-- //레이어 팝업 -->
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        //첫번째 레이어
+        var $panel = $(".pop_box");
+        var $panelContents = $panel.find(".pop_contents");
+
+        $("#btn_popup_open").on("click", function(e) {
+            // 팝업 가운데 설정(가로)
+            if ($panelContents.outerWidth() < $(document).width()) {
+                $panelContents.css("margin-left", "-" + $panelContents.outerWidth() / 2 + "px");
+            } else {
+                $panelContents.css("left", "0px");
+            }
+
+            // 팝업 가운데 설정(세로)
+            if ($panelContents.outerHeight() < $(document).height()) {
+                $panelContents.css("margin-top", "-" + $panelContents.outerHeight() / 2 + "px");
+            } else {
+                $panelContents.css("top", "0px");
+            }
+
+            // 레이어 팝업 열기
+            $panel.fadeIn();
+        });
+
+        // 팝업 닫기 이벤트 정의
+        $("#btn_popup_close").on("click", popupClose);
+
+        // 팝업 배경 클릭 이벤트 정의
+        $panel.find(".pop_bg").on("click", popupClose);
+
+        function popupClose(e) {
+            $panel.fadeOut();
+            // 이벤트 기본 동작 중단
+            e.preventDefault();
+        }
+
+        //두번째 레이어
+        var $panel = $(".pop_box2");
+        var $panelContents = $panel.find(".pop_contents2");
+
+        $("#btn_popup_open2").on("click", function(e) {
+            // 팝업 가운데 설정(가로)
+            if ($panelContents.outerWidth() < $(document).width()) {
+                $panelContents.css("margin-left", "-" + $panelContents.outerWidth() / 2 + "px");
+            } else {
+                $panelContents.css("left", "0px");
+            }
+
+            // 팝업 가운데 설정(세로)
+            if ($panelContents.outerHeight() < $(document).height()) {
+                $panelContents.css("margin-top", "-" + $panelContents.outerHeight() / 2 + "px");
+            } else {
+                $panelContents.css("top", "0px");
+            }
+
+            // 레이어 팝업 열기
+            $panel.fadeIn();
+        });
+
+        // 팝업 닫기 이벤트 정의
+        $("#btn_popup_close2").on("click", popupClose);
+
+        // 팝업 배경 클릭 이벤트 정의
+        $panel.find(".pop_bg2").on("click", popupClose);
+
+        function popupClose(e) {
+            $panel.fadeOut();
+            // 이벤트 기본 동작 중단
+            e.preventDefault();
+        }
+
+    });
+</script>
+</body>
+</html>
