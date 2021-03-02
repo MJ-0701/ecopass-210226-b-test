@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!--<head>-->
+<!--  -->
+<!--</head>-->
+<div class="demo-btns">
+    <header>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <h1>Material Design Modals</h1>
+        <!--    <link th:href="@{/css/online/popupTest2.css}" rel="stylesheet" type="text/css" />-->
+    </header>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            line-height: 1.5;
+            font-family: 'Lato';
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+        h1,
+        h2,
+        h3,
+        p {
+            font-weight: 300;
+            margin: 0 0 2.4rem 0;
+        }
+        h1,
+        h2,
+        h3 {
+            line-height: 1.3;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+            font-weight: 400;
+        }
+        /**
+         * Material Modal CSS
+         */
+        .modal {
+            will-change: visibility, opacity;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            /*transition-delay: $modal-delay;*/
+        }
+        .modal--active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .modal--align-top {
+            align-items: flex-start;
+        }
+        .modal__bg {
+            background: transparent;
+        }
+        .modal__dialog {
+            max-width: 600px;
+            padding: 1.2rem;
+        }
+        .modal__content {
+            will-change: transform, opacity;
+            position: relative;
+            padding: 2.4rem;
+            background: #ffebee;
+            background-clip: padding-box;
+            box-shadow: 0 12px 15px 0 rgba(0,0,0,0.25);
+            opacity: 0;
+            transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .modal__content--active {
+            opacity: 1;
+        }
+        .modal__close {
+            z-index: 1100;
+            cursor: pointer;
+        }
+        .modal__trigger {
+            position: relative;
+            display: inline-block;
+            padding: 1.2rem 2.4rem;
+            color: rgba(0,0,0,0.7);
+            line-height: 1;
+            cursor: pointer;
+            background: #ffebee;
+            box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .modal__trigger--active {
+            z-index: 10;
+        }
+        .modal__trigger:hover {
+            background: #e5d3d6;
+        }
+        #modal__temp {
+            will-change: transform, opacity;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #ffebee;
+            transform: none;
+            opacity: 1;
+            transition: opacity 0.1s ease-out, transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        /**
+         * Demo specific CSS
+         */
+        body {
+            height: 100vh;
+            /*background: #f44336; <!-- 바디빨간 부분 -->*/
+        }
+        img {
+            max-width: 100%;
+        }
+        .demo-btns header {
+            padding: 7vh 10vw;
+            background: #ffebee;
+            display: flex;
+            align-items: center;
+        }
+        .demo-btns header h1 {
+            margin: 0;
+            color: rgba(0,0,0,0.54);
+            font-weight: 300;
+        }
+        .demo-btns .info {
+            background: #f44336; <!-- 푸터 빨간부분 -->
+            padding: 3vh 10vw;
+            height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-flow: column wrap;
+        }
+        .demo-btns p {
+            text-align: center;
+            color: #fff;
+        }
+        .demo-btns .link {
+            font-size: 20px;
+        }
+        .demo-btns .modal__trigger {
+            margin-right: 3px;
+        }
+        @media (max-width: 640px) {
+            .demo-btns .modal__trigger {
+                margin-bottom: 0.8rem;
+            }
+        }
+        .demo-close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 1.2rem;
+            padding: 0.6rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 50%;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .demo-close svg {
+            width: 24px;
+            fill: #fff;
+            pointer-events: none;
+            vertical-align: top;
+        }
+        .demo-close:hover {
+            background: rgba(0,0,0,0.6);
+        }
+        .logo {
+            position: fixed;
+            bottom: 3vh;
+            right: 3vw;
+            z-index: 2;
+        }
+        .logo img {
+            width: 45px;
+            transform: rotate(0);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .logo img:hover {
+            transform: rotate(180deg) scale(1.1);
+        }
+    </style>
+    <div class="info">
+        <!-- 버튼 -->
+        <div class="buttons">
+            <p>
+                <a href="" data-modal="#modal" class="modal__trigger">Modal 1</a>
+                <a href="" data-modal="#modal2" class="modal__trigger">Modal 2</a>
+                <a href="" data-modal="#modal3" class="modal__trigger">Modal 3</a>
+            </p>
+        </div>
+        <p>Click a button to activate a modal.</p>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="modal" class="modal modal__bg" role="dialog" aria-hidden="true">
+    <div class="modal__dialog">
+        <div class="modal__content">
+            <h1>Modal</h1>
+            <p>모달1 에 들어갈 내용 텍스트</p>
+
+            <!-- modal close button -->
+            <a href="" class="modal__close demo-close">
+                <svg class="" viewBox="0 0 24 24"><path d="M19 6.41l-1.41-1.41-5.59 5.59-5.59-5.59-1.41 1.41 5.59 5.59-5.59 5.59 1.41 1.41 5.59-5.59 5.59 5.59 1.41-1.41-5.59-5.59z"/><path d="M0 0h24v24h-24z" fill="none"/></svg>
+            </a>
+
+        </div>
+    </div>
+</div>
+
+<!-- 모달2 -->
+<div id="modal2" class="modal modal--align-top modal__bg" role="dialog" aria-hidden="true">
+    <div class="modal__dialog">
+        <div class="modal__content">
+            <h1>Big Modal</h1>
+            <h3>모달2 들어갈 내용 </h3>
+            <p>모달2 들어갈내용 2</p>
+            <p><img src="http://unsplash.it/600/300" alt="" /></p>
+            <p>모달2 들어갈내용 3</p>
+            <p>모달2 들어갈내용 4</p>
+            <!-- modal close button -->
+            <a href="" class="modal__close demo-close">
+                <svg class="" viewBox="0 0 24 24"><path d="M19 6.41l-1.41-1.41-5.59 5.59-5.59-5.59-1.41 1.41 5.59 5.59-5.59 5.59 1.41 1.41 5.59-5.59 5.59 5.59 1.41-1.41-5.59-5.59z"/><path d="M0 0h24v24h-24z" fill="none"/></svg>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!--모달3-->
+<div id="modal3" class="modal modal__bg" role="dialog" aria-hidden="true">
+    <div class="modal__dialog">
+        <div class="modal__content">
+            <h1>Modal 3</h1>
+            <p>모달3 내용 텍스트</p>
+
+            <!-- modal close button -->
+            <a href="" class="modal__close demo-close">
+                <svg class="" viewBox="0 0 24 24"><path d="M19 6.41l-1.41-1.41-5.59 5.59-5.59-5.59-1.41 1.41 5.59 5.59-5.59 5.59 1.41 1.41 5.59-5.59 5.59 5.59 1.41-1.41-5.59-5.59z"/><path d="M0 0h24v24h-24z" fill="none"/></svg>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    var Modal = (function (){
+
+        var trigger =$qsa ('.modal__trigger');
+        var modals = $qsa('.modal');
+        var modalsbg = $qsa('.modal_bg');
+        var content = $qsa('modal_content');
+        var closers = $qsa('.modal_close');
+        var w = window;
+        var isOpen = false;
+        var contentDelay = 400;
+        var len = trigger.length;
+
+        function $qsa(el) {
+            return document.querySelectorAll(el);
+        }
+
+        var getId = function (event) {
+
+            event.preventDefault();
+
+            var self = this;
+            var modalId = self.dataset.modal;
+            var len = modalId.length;
+            <!-- #제거 -->
+            var modalIdTrimmed = modalId.substring(1, len);
+            <!-- 모달버튼 선택후 동작 -->
+            var modal = document.getElementById(modalIdTrimmed);
+
+            makeDiv(self, modal);
+        };
+
+        var makeDiv = function (self, modal){
+            var fakediv = document.getElementById('modal__temp');
+
+            if (fakediv === null){
+                var div = document.createElement('div');
+                div.id = 'modal__temp';
+                self.appendChild(div);
+                moveTrig(self,modal,div);
+            }
+        };
+
+        var  moveTrig = function (trig, modal, div) {                   <!--사실상 스타일 지정 -->
+            var trigProps = trig.getBoundingClientRect();
+            var m = modal;
+            var mProps = m.querySelector('.modal__content').getBoundingClientRect();
+            var transX, transY, scaleX, scaleY;
+            var xc = w.innerWidth / 2;
+            var yc = w.innerHeight / 2;
+
+            trig.classList.add('modal__trigger--activate');
+
+            scaleX = mProps.width / trigProps.width;
+            scaleY = mProps.height / trigProps.height;
+
+            scaleX = scaleX.toFixed(3);
+            scaleY = scaleY.toFixed(3);
+
+            // these values are used to move the button to the center of the window
+            transX = Math.round(xc - trigProps.left - trigProps.width / 2);
+            transY = Math.round(yc - trigProps.top - trigProps.height / 2);
+
+            // if the modal is aligned to the top then move the button to the center-y of the modal instead of the window
+            if (m.classList.contains('modal--align-top')) {
+                transY = Math.round(mProps.height / 2 + mProps.top - trigProps.top - trigProps.height / 2);
+            }
+
+
+            // translate button to center of screen
+            trig.style.transform = 'translate(' + transX + 'px, ' + transY + 'px)';
+            trig.style.webkitTransform = 'translate(' + transX + 'px, ' + transY + 'px)';
+            // expand temporary div to the same size as the modal
+            div.style.transform = 'scale(' + scaleX + ',' + scaleY + ')';
+            div.style.webkitTransform = 'scale(' + scaleX + ',' + scaleY + ')';
+
+
+            window.setTimeout(function() {
+                window.requestAnimationFrame(function() {
+                    open(m, div);
+                });
+            }, contentDelay);
+
+        };
+         var open = function (m, div){
+
+             if (!isOpen){
+                 <!--팝업창 안의 내용 선택하기-->
+                 var content = m.querySelector('.modal__content');
+                 m.classList.add('modal--activate');
+
+                 content.addEventListener('transitioned', hideDiv, false);
+
+                 isOpen = true;
+             }
+             function hideDiv() {
+
+                 div.style.opacity = '0';
+                 content.removeEventListener('transitioned', hideDiv, false);
+             }
+         };
+        var close = function (event) {
+
+            event.preventDefault();
+            event.stopImmediatePropagation();
+
+            var target = event.target;
+            var div = document.getElementById('modal__temp');
+
+            if (isOpen && target.classList.contains('modal__bg') || target.classList.contains('modal__close')){
+
+                div.style.opacity = '1';
+                div.removeAttribute('style');
+
+                for (var i =0; i < len; i++){
+                    modals[i].classList.remove('modal--activate');
+                    content[i].classList.remove('modal__content--activate');
+                    trigger[i].style.transform = 'none';
+                    trigger[i].style.webkitTransform = 'none';
+                    trigger[i].classList.remove('modal__trigger--activate');
+                }
+                div.addEventListener('transitioned', removeDiv, false);
+
+                isOpen = false;
+
+            }
+
+            function removeDiv() {
+                setTimeout(function () {
+                    window.requestAnimationFrame(function () {
+                        div.remove();
+                    });
+                }, contentDelay -50);
+            }
+        };
+
+        var bindActions = function () {
+            for (var i = 0; i < len; i++){
+                trigger[i].addEventListener('click', getId, false);
+                closers[i].addEventListener('click', close, false);
+                modalsbg[i].addEventListener('click', close, false);
+            }
+        };
+
+        var init = function () {
+            bindActions();
+        }
+        return {
+            init : init
+        };
+    }());
+    Modal.init();
+
+</script>
+
+</html>
